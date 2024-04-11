@@ -4,6 +4,7 @@ import { startStandaloneServer } from '@apollo/server/standalone';
 // スキーマ（データ構造）
 const typeDefs = `#graphql
   type Book {
+    id: ID
     title: String
     author: String
     price: Int
@@ -16,12 +17,13 @@ const typeDefs = `#graphql
 
 const books = [
   {
+    id: '1',
     title: '星の王子さま',
     author: 'サンテグジュペリ',
     price: 720,
   },
   {
-    id: 2,
+    id: '2',
     title: '銀河鉄道の夜',
     author: '宮沢賢治',
     price: 520,
