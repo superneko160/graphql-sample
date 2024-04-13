@@ -1,19 +1,15 @@
+import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
+import { loadSchemaSync } from '@graphql-tools/load';
+import { addResolversToSchema } from '@graphql-tools/schema';
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
+import { join } from 'path';
 
 // スキーマ（データ構造）
-const typeDefs = `#graphql
-  type Book {
-    id: ID
-    title: String
-    author: String
-    price: Int
-  }
-
-  type Query {
-    books: [Book]
-  }
-`;
+const __dirname = new URL(import.meta.url).pathname;
+const schema = loadSchemaSync(join(__dirname, '../../schema/schema.graphql'), {
+  loaders: [new GraphQLFileLoader()],
+});
 
 const books = [
   {
@@ -39,8 +35,7 @@ const resolvers = {
 
 // Apolloサーバ
 const server = new ApolloServer({
-  typeDefs,  // スキーマ
-  resolvers,  // リゾルバ
+  schema: addResolversToSchema({ schema, resolvers })
 });
 
 // Passing an ApolloServer instance to the `startStandaloneServer` function:
